@@ -1,20 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-  <title>Bootstrap | Product List With Cart</title>
-  
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lexend+Deca:wght@400&display=swap" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Imágenes con Bootstrap</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .image-box {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+        .image-box img {
+            width: 50%;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .add-btn {
+            margin-top: 10px;
+        }
+        .sidebar {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-left: 2px solid #ddd;
+        }
+        .remove-btn {
+            cursor: pointer;
+            color: red;
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="image-box">
+                    <img src="./assets/image-waffle-desktop.jpg" alt="Waffle">
+                    <p>Waffle - $10</p>
+                    <button class="btn btn-primary add-btn">Agregar</button>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="image-box">
+                    <img src="./assets/image-panna-cotta-desktop.jpg" alt="Panna Cotta">
+                    <p>Panna Cotta - $20</p>
+                    <button class="btn btn-primary add-btn">Agregar</button>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="image-box">
+                    <img src="./assets/image-baklava-desktop.jpg" alt="Baklava">
+                    <p>Baklava - $30</p>
+                    <button class="btn btn-primary add-btn">Agregar</button>
+                </div>
+            </div>
+            <!-- Agrega más productos aquí -->
+        </div>
+    </div>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4 offset-md-4 sidebar">
+                <h4>Productos Seleccionados</h4>
+                <ul id="selected-products" class="list-group"></ul>
+                <h4 class="mt-3">Valor Total</h4>
+                <p id="total-price" class="fw-bold">$0</p>
+                <button id="confirm-order" class="btn btn-success w-100 mt-3">Confirmar Orden</button>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        let total = 0;
+        document.querySelectorAll('.add-btn').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                let productText = document.querySelectorAll('.image-box p')[index].innerText;
+                let [productName, priceText] = productText.split(' - ');
+                let price = parseInt(priceText.slice(1));
+                
+                total += price;
+                document.getElementById('total-price').innerText = `$${total}`;
+                
+                let listItem = document.createElement('li');
+                listItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
+                listItem.innerText = `${productName} - $${price}`;
+                
+                let removeBtn = document.createElement('span');
+                removeBtn.innerText = '✖';
+                removeBtn.classList.add('remove-btn');
+                removeBtn.addEventListener('click', () => {
+                    total -= price;
+                    document.getElementById('total-price').innerText = `$${total}`;
+                    listItem.remove();
+                });
+                
+                listItem.appendChild(removeBtn);
+                document.getElementById('selected-products').appendChild(listItem);
+            });
+        });
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        document.getElementById('confirm-order').addEventListener('click', () => {
+            let items = Array.from(document.getElementById('selected-products').children).map(li => li.innerText.replace('✖', '').trim());
+            if (items.length === 0) {
+                alert("No has seleccionado ningún producto.");
+                return;
+            }
+            alert(`Orden Confirmada:\n\n${items.join('\n')}\n\nTotal: $${total}`);
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
