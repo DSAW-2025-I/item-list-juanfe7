@@ -1,74 +1,163 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
-
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
-  
-  <title>Frontend Mentor | Product list with cart</title>
-
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-  <style>
-    .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Imágenes sin Bootstrap</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+        .image-box {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+        .image-box img {
+            width: 50%;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .add-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #ff4800;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .sidebar {
+            width: 300px;
+            max-height: 50vh;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-left: 2px solid #ddd;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+        }
+        .remove-btn {
+            margin-left: 10px;
+            cursor: pointer;
+            color: rgb(255, 72, 0);
+        }
+        #confirm-order {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: rgb(218, 98, 0);
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
+  <head>Deassers</head>
+    <div class="container">
+        <div class="image-box">
+            <img src="./assets/image-waffle-desktop.jpg" alt="Waffle">
+            <p>Waffle - $10</p>
+            <button class="add-btn">Agregar</button>
+        </div>
+        <div class="image-box">
+            <img src="./assets/image-panna-cotta-desktop.jpg" alt="Panna Cotta">
+            <p>Panna Cotta - $20</p>
+            <button class="add-btn">Agregar</button>
+        </div>
+        <div class="image-box">
+            <img src="./assets/image-baklava-desktop.jpg" alt="Baklava">
+            <p>Baklava - $30</p>
+            <button class="add-btn">Agregar</button>
+        </div>
+        <div class="image-box">
+            <img src="./assets/image-tiramisu-desktop.jpg" alt="Tiramisú">
+            <p>Tiramisú - $40</p>
+            <button class="add-btn">Agregar</button>
+        </div>
+        <div class="image-box">
+            <img src="./assets/image-creme-brulee-desktop.jpg" alt="Creme Brulee">
+            <p>Creme Brulee - $50</p>
+            <button class="add-btn">Agregar</button>
+        </div>
+        <div class="image-box">
+            <img src="./assets/image-cake-desktop.jpg" alt="Cake">
+            <p>Cake - $60</p>
+            <button class="add-btn">Agregar</button>
+        </div>
+        <div class="image-box">
+            <img src="./assets/image-macaron-desktop.jpg" alt="Macarons">
+            <p>Macarons - $70</p>
+            <button class="add-btn">Agregar</button>
+        </div>
+        <div class="image-box">
+            <img src="./assets/image-meringue-desktop.jpg" alt="Donuts">
+            <p>Donuts - $80</p>
+            <button class="add-btn">Agregar</button>
+        </div>
+        <div class="image-box">
+            <img src="./assets/image-brownie-desktop.jpg" alt="Brownie">
+            <p>Brownie - $90</p>
+            <button class="add-btn">Agregar</button>
+        </div>
+    </div>
+    
+    <div class="sidebar">
+        <h4>Productos Seleccionados</h4>
+        <ul id="selected-products"></ul>
+        <h4>Valor Total</h4>
+        <p id="total-price">$0</p>
+        <button id="confirm-order">Confirmar Orden</button>
+    </div>
+    
+    <script>
+        let total = 0;
+        document.querySelectorAll('.add-btn').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                let productText = document.querySelectorAll('.image-box p')[index].innerText;
+                let [productName, priceText] = productText.split(' - ');
+                let price = parseInt(priceText.slice(1));
+                
+                total += price;
+                document.getElementById('total-price').innerText = `$${total}`;
+                
+                let listItem = document.createElement('li');
+                listItem.innerText = `${productName} - $${price}`;
+                
+                let removeBtn = document.createElement('span');
+                removeBtn.innerText = '✖';
+                removeBtn.classList.add('remove-btn');
+                removeBtn.addEventListener('click', () => {
+                    total -= price;
+                    document.getElementById('total-price').innerText = `$${total}`;
+                    listItem.remove();
+                });
+                
+                listItem.appendChild(removeBtn);
+                document.getElementById('selected-products').appendChild(listItem);
+            });
+        });
 
-  Desserts
-
-  Waffle with Berries
-  Waffle
-  6.50
-  Add to Cart
-
-  Vanilla Bean Crème Brûlée
-  Crème Brûlée
-  7.00
-  Add to Cart
-
-  Macaron Mix of Five
-  Macaron
-  8.00
-  Add to Cart
-
-  Classic Tiramisu
-  Tiramisu
-  5.50
-  Add to Cart
-
-  Pistachio Baklava
-  Baklava
-  4.00
-  Add to Cart
-
-  Lemon Meringue Pie
-  Pie
-  5.00
-  Add to Cart
-
-  Red Velvet Cake
-  Cake
-  4.50
-  Add to Cart
-
-  Salted Caramel Brownie
-  Brownie
-  4.50
-  Add to Cart
-
-  Vanilla Panna Cotta
-  Panna Cotta
-  6.50
-  Add to Cart
-
-  Your Cart (<!-- Quantity -->)
-  Your added items will appear here
-
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>. 
-    Coded by <a href="#">Your Name Here</a>.
-  </div>
+        document.getElementById('confirm-order').addEventListener('click', () => {
+            let items = Array.from(document.getElementById('selected-products').children).map(li => li.innerText.replace('✖', '').trim());
+            if (items.length === 0) {
+                alert("No has seleccionado ningún producto.");
+                return;
+            }
+            alert(`Orden Confirmada:\n\n${items.join('\n')}\n\nTotal: $${total}`);
+        });
+    </script>
 </body>
 </html>
